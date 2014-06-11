@@ -53,14 +53,34 @@ namespace SynthesizeForTaranis
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            string fileName = textBox1.Text;
-            if (!fileName.EndsWith(".wav"))
-                fileName += ".wav";
-            if (fileName.Length > 12)
-                MessageBox.Show(this, "Max length for Tarnis is 8 characters");
-            string text = textBox2.Text;
-            if (fileName.Length != 0 && folderName != null)
+            string fileName = textBox1.Text.Trim();
+
+            if (fileName.Length != 0)
             {
+                if (fileName.EndsWith(".wav"))
+                {
+                    fileName = fileName.Substring(0, fileName.IndexOf(".wav"));
+                }
+                else
+                {
+                    textBox1.Text = fileName + ".wav";
+                }
+                
+                if (fileName.Length > 8)
+                {
+                    string oldName = fileName;
+                    fileName = fileName.Substring(0, 8);
+                    fileName += ".wav";
+                    string warning = "The filename: " + oldName + " is too long.\nMax length for Taranis is 12 characters including file ending.\nFile will be renamed to " + fileName;
+                    MessageBox.Show(this, warning);
+                }
+
+                if (folderName == null)
+                {
+                    folderName = Environment.CurrentDirectory;
+                }
+
+                string text = textBox2.Text;
                 speaker.SelectVoice(voices[comboBox1.SelectedIndex]);
                 var speechAudioFormatInfo = new SpeechAudioFormatInfo(EncodingFormat.ULaw, 32000, 8, 1, 16000, 2, null);
                 speaker.SetOutputToWaveFile(folderName + "\\" + fileName, speechAudioFormatInfo);
