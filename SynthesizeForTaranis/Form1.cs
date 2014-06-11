@@ -44,18 +44,24 @@ namespace SynthesizeForTaranis
             string text = textBox2.Text;
             speaker.SelectVoice(voices[comboBox1.SelectedIndex]);
             speaker.SetOutputToDefaultAudioDevice();
+            saveButton.Enabled = false;
+            speakButton.Enabled = false;
             speaker.Speak(text);
+            saveButton.Enabled = true;
+            speakButton.Enabled = true; ;
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            string path = textBox1.Text;
+            string fileName = textBox1.Text;
+            if (!fileName.EndsWith(".wav"))
+                fileName += ".wav";
             string text = textBox2.Text;
-            if (path.Length != 0)
+            if (fileName.Length != 0 && folderName != null)
             {
                 speaker.SelectVoice(voices[comboBox1.SelectedIndex]);
                 var speechAudioFormatInfo = new SpeechAudioFormatInfo(EncodingFormat.ULaw, 32000, 8, 1, 16000, 2, null);
-                speaker.SetOutputToWaveFile(path, speechAudioFormatInfo);
+                speaker.SetOutputToWaveFile(folderName + "\\" + fileName, speechAudioFormatInfo);
                 speaker.Speak(text);
             }
         }
