@@ -56,6 +56,8 @@ namespace SynthesizeForTaranis
             string fileName = textBox1.Text;
             if (!fileName.EndsWith(".wav"))
                 fileName += ".wav";
+            if (fileName.Length > 12)
+                MessageBox.Show(this, "Max length for Tarnis is 8 characters");
             string text = textBox2.Text;
             if (fileName.Length != 0 && folderName != null)
             {
